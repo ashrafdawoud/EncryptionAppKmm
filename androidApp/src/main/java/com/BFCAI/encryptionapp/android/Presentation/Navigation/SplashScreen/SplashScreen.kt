@@ -1,5 +1,6 @@
 package com.BFCAI.encryptionapp.android.Presentation.Navigation.SplashScreen
 
+import android.app.Activity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
@@ -68,7 +69,4 @@ fun SplashScreen(){
 
         }
     }
-
-
-
 }

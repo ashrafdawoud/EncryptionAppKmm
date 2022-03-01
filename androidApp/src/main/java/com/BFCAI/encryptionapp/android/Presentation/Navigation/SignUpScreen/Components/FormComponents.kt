@@ -19,10 +19,14 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.BFCAI.encryptionapp.Presentation.LoginScreen.LoginScreenEvent
+import com.BFCAI.encryptionapp.Presentation.SignUpScreen.SignupScreenEvent
 import com.BFCAI.encryptionapp.android.R
 
 @Composable
-fun FormComponents() {
+fun FormComponents(
+    onTriggerEvent:(SignupScreenEvent)->Unit,
+    signupSuccess:()->Unit
+) {
     var emailtext by remember { mutableStateOf(TextFieldValue("")) }
     var passwordtext by remember { mutableStateOf(TextFieldValue("")) }
     var re_passwordtext by remember { mutableStateOf(TextFieldValue("")) }
@@ -120,10 +124,10 @@ fun FormComponents() {
                 modifier = Modifier.fillMaxWidth(),
                 shape = MaterialTheme.shapes.large,
                 singleLine = true,
-                visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+                visualTransformation = if (re_passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     IconButton(onClick = {
-                        passwordVisibility = !passwordVisibility
+                        re_passwordVisibility = !re_passwordVisibility
                     }) {
                         Icon(
                             imageVector = Icons.Default.RemoveRedEye,
@@ -193,8 +197,10 @@ fun FormComponents() {
                         iserror = true
                     }else if (Usernametext.text .equals( "")) {
                         iserror = true
+                    }else if(!passwordtext.text .equals(re_passwordtext.text )) {
+                        iserror = true
                     } else {
-
+                        onTriggerEvent(SignupScreenEvent.signup(emailtext.text,passwordtext.text,Usernametext.text,signupSuccess))
                     }
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary),

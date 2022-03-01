@@ -33,6 +33,7 @@ kotlin {
             dependencies {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
+                implementation(kotlin("test")) // This brings all the platform dependencies automatically
             }
         }
         val androidMain by getting {

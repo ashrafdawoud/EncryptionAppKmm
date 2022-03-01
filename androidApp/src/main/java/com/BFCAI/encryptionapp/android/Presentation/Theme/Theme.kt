@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import com.BFCAI.encryptionapp.android.R
 import com.example.food1fork.android.Presentation.Componnents.CircularIndeterminateProgressBar
 import com.example.food1fork.android.Presentation.Componnents.ProcessDialogQueue
 import com.example.food2fork.Food2ForkKmm.Domain.Model.GenericMessageInfo
@@ -26,7 +28,7 @@ private val LightThemeColors = lightColors(
     onError = RedErrorLight,
     background = background,
     onBackground = componentBackground,
-    surface = Color.White,
+    surface = cards,
     onSurface = Black2,
 )
 

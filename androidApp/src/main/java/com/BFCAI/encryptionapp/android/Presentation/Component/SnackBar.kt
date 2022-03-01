@@ -11,10 +11,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 
 @Composable
-fun CustomSnackBar() {
+fun CustomSnackBar(
+    discription:String?
+) {
     Toast.makeText(
         LocalContext.current,
-        "Wrong Email or Password",
+        discription,
         Toast.LENGTH_SHORT
     ).show()
 }

@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.BFCAI.encryptionapp.Interactors.UserReposetories.UserRepository
+import com.BFCAI.encryptionapp.Interactors.UserReposetories.UserRepositoryImp
 import com.BFCAI.encryptionapp.Presentation.LoginScreen.LoginScreenEvent
 import com.BFCAI.encryptionapp.Presentation.LoginScreen.LoginScreenState
 import com.example.food2fork.Food2ForkKmm.Domain.Model.GenericMessageInfo
@@ -20,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val userRepository: UserRepository
+    private val userRepositoryImp: UserRepositoryImp
 ) : ViewModel() {
     val state: MutableState<LoginScreenState> = mutableStateOf(LoginScreenState())
     fun onTriggerEvent(event: LoginScreenEvent){
@@ -32,7 +32,7 @@ class LoginViewModel @Inject constructor(
     }
     fun login(email: String, password: String ,openHomeScreen:()-> Unit) {
         viewModelScope.launch {
-            userRepository.login(email, password).onEach {
+            userRepositoryImp.login(email, password).onEach {
                 it.isLoading?.let {
                     Log.e("viewmodelstate",it.toString())
                     state.value = state.value.copy(isloading = it)

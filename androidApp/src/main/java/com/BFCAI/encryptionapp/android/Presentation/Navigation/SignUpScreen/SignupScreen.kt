@@ -9,6 +9,8 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.BFCAI.encryptionapp.Presentation.SignUpScreen.SignupScreenEvent
+import com.BFCAI.encryptionapp.Presentation.SignUpScreen.SignupScreenState
 import com.BFCAI.encryptionapp.android.Presentation.Navigation.LoginScreen.Components.TextFieldComponent
 import com.BFCAI.encryptionapp.android.Presentation.Navigation.SignUpScreen.Components.FormComponents
 import com.BFCAI.encryptionapp.android.R
@@ -18,11 +20,14 @@ import com.example.food1fork.android.Presentation.Theme.AppTheme
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SignUpScreen(
-
+    state:SignupScreenState,
+    onTriggerEvent:(SignupScreenEvent)->Unit,
+    signupSuccess:()->Unit
 ){
 
     AppTheme(
-        displayProgressBar = false,
+        displayProgressBar = state.isloading,
+        queue = state.queue,
         onRemoveHeadMessage = { /*TODO*/ })
     {
         Column(
@@ -37,7 +42,7 @@ fun SignUpScreen(
                     .height(110.dp)
                     .width(110.dp)
             )
-            FormComponents()
+            FormComponents(onTriggerEvent,signupSuccess)
         }
     }
 }

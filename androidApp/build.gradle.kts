@@ -73,9 +73,11 @@ dependencies {
         implementation("androidx.compose.runtime:runtime-livedata:1.0.5")
         implementation("androidx.compose.runtime:runtime-rxjava2:1.0.5")
         implementation("androidx.navigation:navigation-compose:2.5.0-alpha01")
-
+        implementation("com.parse:parse-android:1.10.0")
+        implementation ("com.google.accompanist:accompanist-permissions:0.24.2-alpha")
         // UI Tests
         androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.0.5")
+        implementation("io.coil-kt:coil-compose:1.4.0")
     }
 
 }

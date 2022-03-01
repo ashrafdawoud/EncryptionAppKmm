@@ -7,6 +7,7 @@ val yello = Color(0xFFE3D843)
 val Blue400 = Color(0xFF42A5F5)
 val componentBackground = Color(0xFF232a30)
 val buttons = Color(0xFF415772)
+val cards = Color(0xFF202429)
 val Blue700 = Color(0xFF1976D2)
 val Blue800 = Color(0xFF1565C0)
 

@@ -24,7 +24,7 @@ fun ProcessDialogQueue(
                     onRemoveHeadMessage = onRemoveHeadMessage
                 )
             else
-                CustomSnackBar()
+                CustomSnackBar(dialogInfo.description)
             queue.poll()
         }
     }
