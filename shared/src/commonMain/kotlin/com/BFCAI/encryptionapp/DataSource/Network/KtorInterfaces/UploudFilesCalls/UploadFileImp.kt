@@ -27,32 +27,45 @@ class UploadFileImp constructor(
     @OptIn(InternalAPI::class)
     override suspend fun uploadFile(file: ByteArray,filename :String): String {
 
-         /*val response = client.submitFormWithBinaryData<HttpResponse>(
-                formData {
-                    append("file", file, Headers.build {
-                        append(HttpHeaders.ContentType, ContentType.Image.JPEG)
-                    })
-            }) {
-             url("https://encyriptionapp.b4a.io/parse/files/hello.$filename")
+         val response = client.submitFormWithBinaryData<HttpResponse>(
+             formData = formData {
+                 append(
+                     "file",
+                     InputProvider { buildPacket { writeFully(file) } }
+                     /*Headers.build {
+                         append(HttpHeaders.ContentType, ContentType.Image.PNG.toString())
+                         append(
+                             HttpHeaders.ContentDisposition,
+                             ContentDisposition.File.withParameter(
+                                 ContentDisposition.Parameters.FileName,
+                                 "test"
+                             )
+                         )
+                     }*/)
+             }) {
+             url("https://encyriptionapp.b4a.io/parse/files/hello.${filename}")
             headers {
                 appendAll("X-Parse-Application-Id", listOf(PublicData.Application_Id))
                 appendAll("X-Parse-REST-API-Key", listOf(PublicData.REST_API_Key))
             }
-             onUpload { bytesSentTotal, contentLength ->
-                 println("Sent $bytesSentTotal bytes from $contentLength  ${filename}")
-             }
-        }*/
-        val response = client.post<HttpResponse>("https://encyriptionapp.b4a.io/parse/files/hello.png") {
+             body = file
+        }
+       /* val response = client.post<HttpResponse>("http://encyriptionapp.b4a.io/parse/files/hello.txt") {
             headers.append("X-Parse-Application-Id", PublicData.Application_Id)
             headers.append("X-Parse-REST-API-Key", PublicData.REST_API_Key)
-            body = MultiPartFormDataContent(
-                formData {
-                    append("file", file/*bytes*/, Headers.build {
-                        append(HttpHeaders.ContentType, "image/png")
-                    })
+            headers.append(HttpHeaders.ContentType, ContentType.Image.PNG)
+            body = formData {
+                    this.appendInput(
+                        key = "",
+                        headers = Headers.build {
+                            append(HttpHeaders.ContentType, ContentType.Image.PNG)
+
+                        },
+                    ) { buildPacket { writeFully(file) } }
                 }
-            )
-        }
+
+
+        }*/
         if (response.status.value in 200..299) {
             val res = response.receive<UploadedFileResponceDto>()
             Log.e("Image_url",res.url + "  "+file)

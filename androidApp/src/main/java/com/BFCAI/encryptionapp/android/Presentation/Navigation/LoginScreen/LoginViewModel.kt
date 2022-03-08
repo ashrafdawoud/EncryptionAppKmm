@@ -60,4 +60,7 @@ class LoginViewModel @Inject constructor(
         }
 
     }
+    fun resetState(){
+
+    }
 }
