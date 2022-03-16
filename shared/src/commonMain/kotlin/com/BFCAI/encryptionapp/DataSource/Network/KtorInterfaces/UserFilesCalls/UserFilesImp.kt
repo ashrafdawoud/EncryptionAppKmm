@@ -1,47 +1,35 @@
-package com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.UploudFilesCalls
+package com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.UserFilesCalls
 
 import android.util.Log
 import com.BFCAI.encryptionapp.DataSource.Network.EntityDto.FileDto
-import com.BFCAI.encryptionapp.DataSource.Network.EntityDto.SignUpDto
 import com.BFCAI.encryptionapp.DataSource.Network.EntityDto.UploadFileDto
+import com.BFCAI.encryptionapp.DataSource.Network.EntityDto.UserDto
+import com.BFCAI.encryptionapp.DataSource.Network.EntityDto.UserFilesDto
+import com.BFCAI.encryptionapp.DataSource.Network.Mappers.toUserFilesModel
+import com.BFCAI.encryptionapp.DataSource.Network.Mappers.toUserModel
+import com.BFCAI.encryptionapp.Domain.Model.UserFilesModel
 import com.BFCAI.encryptionapp.Domain.Utils.PublicData
 import io.ktor.client.*
 import io.ktor.client.call.*
-import io.ktor.client.features.*
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.client.statement.*
-import io.ktor.http.*
-import io.ktor.http.content.*
 import io.ktor.util.*
 import io.ktor.utils.io.core.*
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
-import kotlin.math.log
-import kotlin.random.Random
 
-class UploadFileImp constructor(
+class UserFilesImp constructor(
     val client: HttpClient,
 
-    ) : UploadFileInterface {
+    ) : UserFilesInterface {
     @OptIn(InternalAPI::class)
-    override suspend fun uploadFile(file: ByteArray,filename :String): String {
+    override suspend fun uploadFile(file: ByteArray,filename :String,filetype :String,encryptionTool :String,userid :String): String {
 
          val response = client.submitFormWithBinaryData<HttpResponse>(
              formData = formData {
                  append(
                      "file",
-                     InputProvider { buildPacket { writeFully(file) } }
-                     /*Headers.build {
-                         append(HttpHeaders.ContentType, ContentType.Image.PNG.toString())
-                         append(
-                             HttpHeaders.ContentDisposition,
-                             ContentDisposition.File.withParameter(
-                                 ContentDisposition.Parameters.FileName,
-                                 "test"
-                             )
-                         )
-                     }*/)
+                     InputProvider { buildPacket { writeFully(file) } })
              }) {
              url("https://encyriptionapp.b4a.io/parse/files/hello.${filename}")
             headers {
@@ -50,22 +38,6 @@ class UploadFileImp constructor(
             }
              body = file
         }
-       /* val response = client.post<HttpResponse>("http://encyriptionapp.b4a.io/parse/files/hello.txt") {
-            headers.append("X-Parse-Application-Id", PublicData.Application_Id)
-            headers.append("X-Parse-REST-API-Key", PublicData.REST_API_Key)
-            headers.append(HttpHeaders.ContentType, ContentType.Image.PNG)
-            body = formData {
-                    this.appendInput(
-                        key = "",
-                        headers = Headers.build {
-                            append(HttpHeaders.ContentType, ContentType.Image.PNG)
-
-                        },
-                    ) { buildPacket { writeFully(file) } }
-                }
-
-
-        }*/
         if (response.status.value in 200..299) {
             val res = response.receive<UploadedFileResponceDto>()
             Log.e("Image_url",res.url + "  "+file)
@@ -82,9 +54,9 @@ class UploadFileImp constructor(
                         name = res.name,
                         url = res.url
                     ),
-                    file_type = "adsad",
-                    encryption_tool_id = "sada",
-                    user_id = "sadas"
+                    file_type = filetype,
+                    encryption_tool_id = encryptionTool,
+                    user_id = userid
                 )
             }
             if (response2.status.value in 200..299) {
@@ -97,6 +69,32 @@ class UploadFileImp constructor(
         }
 
     }
+
+    override suspend fun getAllFiles(userid: String): UserFilesModel {
+        return client.get<UserFilesDto>{
+            url("${PublicData.BASEURL}"+"classes/UserFiles?where={\"user_id\":\"$userid\"}")
+            headers {
+                append("X-Parse-Application-Id",PublicData.Application_Id )
+                append("X-Parse-REST-API-Key", PublicData.REST_API_Key)
+                append("X-Parse-Revocable-Session", "1")
+            }
+        }.toUserFilesModel()
+    }
+    override suspend fun deleteFile(objectId: String):String {
+        val clientreq =  client.delete<HttpResponse>{
+            url("${PublicData.BASEURL}"+"classes/UserFiles/$objectId")
+            headers {
+                append("X-Parse-Application-Id",PublicData.Application_Id )
+                append("X-Parse-REST-API-Key", PublicData.REST_API_Key)
+            }
+        }
+        if (clientreq.status.value in 200..299){
+            return "sucsess"
+        }else{
+            return "fail"
+        }
+    }
+
 
 }
 

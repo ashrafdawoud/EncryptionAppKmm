@@ -9,10 +9,9 @@ import java.io.File
 data class EncryptionScreenState(
     var isloading:Boolean = false,
     var filename : String = "no file selected yet",
-    var fileType : String = "pdf",
+    var fileType : String = "application/pdf",
     var fileBytes : ByteArray = "".toByteArray(),
     var encryType : String = "AES/CBC/NoPadding",
-    var filePath : String? = null,
-    var file : File? = null,
+    var userid : String?=null,
     val queue: Queue<GenericMessageInfo> = Queue(mutableListOf())
 )

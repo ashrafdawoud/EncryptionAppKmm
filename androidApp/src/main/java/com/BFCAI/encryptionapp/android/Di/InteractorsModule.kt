@@ -1,8 +1,10 @@
 package com.example.food1fork.android.DI
 
-import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.UploudFilesCalls.UploadFileInterface
+import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.SharedFilesCalls.SharedFilesInterface
+import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.UserFilesCalls.UserFilesInterface
 import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.UserCalls.UserInterface
-import com.BFCAI.encryptionapp.Interactors.UploadFileRepository.UploadFileRepositoryImp
+import com.BFCAI.encryptionapp.Interactors.SharedFilesRepository.SharedFilesRepositoryImp
+import com.BFCAI.encryptionapp.Interactors.UserFileRepository.UserFileRepositoryImp
 import com.BFCAI.encryptionapp.Interactors.UserReposetories.UserRepositoryImp
 import dagger.Module
 import dagger.Provides
@@ -23,8 +25,15 @@ object InteractorsModule {
     @Singleton
     @Provides
     fun provideUploadFileRepository(
-        uploadFileInterface: UploadFileInterface,
-    ):UploadFileRepositoryImp{
-        return UploadFileRepositoryImp(uploadFileInterface)
+        uploadFileInterface: UserFilesInterface,
+    ):UserFileRepositoryImp{
+        return UserFileRepositoryImp(uploadFileInterface)
+    }
+    @Singleton
+    @Provides
+    fun provideSharedFileRepository(
+        sharedFilesInterface: SharedFilesInterface,
+    ):SharedFilesRepositoryImp{
+        return SharedFilesRepositoryImp(sharedFilesInterface)
     }
 }

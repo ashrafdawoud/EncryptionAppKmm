@@ -1,29 +1,26 @@
-package com.BFCAI.encryptionapp.android.Presentation.Navigation.MyFileScreen.Component
+package com.BFCAI.encryptionapp.android.Presentation.Navigation.SentFileScreen.Component
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.BFCAI.encryptionapp.Domain.Model.UserFilesModel
 import com.BFCAI.encryptionapp.Domain.Utils.PublicData
+import com.BFCAI.encryptionapp.Presentation.SharedFilesScreen.SharedFilesEvent
+import com.BFCAI.encryptionapp.Presentation.SharedFilesScreen.SharedFilesState
 import com.BFCAI.encryptionapp.Presentation.UserFilesScreen.UserFilesEvent
 import com.BFCAI.encryptionapp.Presentation.UserFilesScreen.UserFilesState
 import com.BFCAI.encryptionapp.android.Presentation.Component.NoDataComponent
-import com.example.food1fork.android.Presentation.Theme.AppTheme
+import com.BFCAI.encryptionapp.android.Presentation.Navigation.MyFileScreen.Component.UserFileCard
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -31,16 +28,16 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 @ExperimentalMaterialApi
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun FilesListComponent(
-    state: UserFilesState,
-    event: (UserFilesEvent) -> Unit,
+fun SentFilesListComponent(
+    state: SharedFilesState,
+    event: (SharedFilesEvent) -> Unit,
 ) {
     val context = LocalContext.current
     SwipeRefresh(
         state = rememberSwipeRefreshState(state.isloading),
         onRefresh = {
             event(
-                UserFilesEvent.refreshListner(
+                SharedFilesEvent.refreshListner(
                     context.getSharedPreferences(
                         PublicData.GENERAL_PREF,
                         AppCompatActivity.MODE_PRIVATE

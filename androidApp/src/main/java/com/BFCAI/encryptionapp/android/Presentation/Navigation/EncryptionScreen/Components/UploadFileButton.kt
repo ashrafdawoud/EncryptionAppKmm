@@ -7,6 +7,7 @@ import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,6 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.BFCAI.encryptionapp.Domain.Utils.PublicData
 import com.BFCAI.encryptionapp.Presentation.EncryptionScreen.EncryptionScreenEvents
 import com.BFCAI.encryptionapp.Presentation.EncryptionScreen.EncryptionScreenState
 import io.ktor.http.*
@@ -29,57 +32,67 @@ import java.io.File
 @Composable
 fun UploadFileButton(
     state: EncryptionScreenState,
-    onTriggerEvent:(EncryptionScreenEvents)->Unit,
-    uploadfiles:()->Unit
-){
+    onTriggerEvent: (EncryptionScreenEvents) -> Unit,
+    uploadfiles: (NavController) -> Unit
+) {
     val context = LocalContext.current
     var uri by remember { mutableStateOf("") }
     var extention by remember { mutableStateOf("pdf") }
-    val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { result ->
-        result?.let {
+    var filetype by remember { mutableStateOf("pdf") }
+    val launcher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { result ->
+            result?.let {
 
-            uri = it.getPath().toString()
-            val item = context.contentResolver.openInputStream(it)
-            val bytes = item?.readBytes()
-            onTriggerEvent(EncryptionScreenEvents.choose_file(bytes!! ,extention ))
-            item?.close()
+                uri = it.getPath().toString()
+                val item = context.contentResolver.openInputStream(it)
+                val bytes = item?.readBytes()
+                onTriggerEvent(
+                    EncryptionScreenEvents.choose_file(
+                        bytes!!,
+                        extention,
+                        filetype = filetype,
+                        encryptionTool = state.encryType,
+                        userid = context.getSharedPreferences(PublicData.GENERAL_PREF, AppCompatActivity.MODE_PRIVATE).getString("User_Id","")!!
+                    )
+                )
+                item?.close()
+            }
         }
-    }
 
     Column {
         Button(
             onClick = {
-                var type :String = when(state.fileType){
-                    "pdf"->{
+                var type: String = when (state.fileType) {
+                    "application/pdf" -> {
                         "application/pdf"
                     }
-                    "audio/mp3" ->{
+                    "audio/mp3" -> {
                         ContentType.Audio.MPEG.toString()
                     }
-                    "image/jpeg" ->{
+                    "image/jpeg" -> {
                         "image/jpeg"
                     }
-                    "video/mp4" ->{
+                    "video/mp4" -> {
                         "video/mp4"
                     }
-                    else ->{
+                    else -> {
                         "application/pdf"
                     }
                 }
-                when(state.fileType){
-                    "pdf"->{
+                when (state.fileType) {
+                    "application/pdf" -> {
                         extention = "pdf"
                     }
-                    "audio/mp3" ->{
+                    "audio/mp3" -> {
                         extention = "mp3"
                     }
-                    "image/jpeg" ->{
+                    "image/jpeg" -> {
                         extention = "jpeg"
                     }
-                    "video/mp4" ->{
+                    "video/mp4" -> {
                         extention = "mp4"
                     }
-                    else ->{
+                    else -> {
                         extention = "pdf"
                     }
                 }

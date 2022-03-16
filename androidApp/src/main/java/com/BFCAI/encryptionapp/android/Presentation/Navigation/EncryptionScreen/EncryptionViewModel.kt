@@ -1,36 +1,31 @@
 package com.BFCAI.encryptionapp.android.Presentation.Navigation.EncryptionScreen
 
-import android.content.Context
-import android.net.Uri
-import android.os.Environment
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.BFCAI.encryptionapp.Interactors.UploadFileRepository.UploadFileRepositoryImp
+import androidx.navigation.NavController
+import com.BFCAI.encryptionapp.Interactors.UserFileRepository.UserFileRepositoryImp
 import com.BFCAI.encryptionapp.Presentation.EncryptionScreen.EncryptionScreenEvents
 import com.BFCAI.encryptionapp.Presentation.EncryptionScreen.EncryptionScreenState
+import com.BFCAI.encryptionapp.android.Presentation.Navigation.Screens
 import com.example.food2fork.Food2ForkKmm.Domain.Model.GenericMessageInfo
 import com.example.food2fork.Food2ForkKmm.Domain.Utils.GenericMessageInfoQueueUtil
+import com.example.food2fork.Food2ForkKmm.Domain.Utils.Queue
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.ktor.client.request.forms.*
-import io.ktor.http.*
 import io.ktor.util.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import java.io.File
 import javax.inject.Inject
 
 
 @HiltViewModel
 class EncryptionViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val uploadFileRepositoryImp: UploadFileRepositoryImp
+    private val uploadFileRepositoryImp: UserFileRepositoryImp
 ) : ViewModel() {
     val state: MutableState<EncryptionScreenState> = mutableStateOf(EncryptionScreenState())
 
@@ -43,20 +38,20 @@ class EncryptionViewModel @Inject constructor(
                 state.value = state.value.copy(encryType = event.enccy)
             }
             is EncryptionScreenEvents.choose_file -> {
-                state.value = state.value.copy(fileBytes = event.byteArray, filename = event.filename)
-            }
-            is EncryptionScreenEvents.upload_file -> {
-                uploadfiles()
+                state.value = state.value.copy(fileBytes = event.file, filename = event.filename , userid = event.userid)
             }
         }
     }
 
     @OptIn(InternalAPI::class)
-    fun uploadfiles() {
+    fun uploadfiles(navController: NavController) {
         viewModelScope.launch {
             uploadFileRepositoryImp.uploadFile(
                 state.value.fileBytes,
-                state.value.filename
+                state.value.filename,
+                state.value.fileType,
+                state.value.encryType,
+                state.value.userid!!,
             ).onEach {
                 it.isLoading?.let {
                     Log.e("viewmodelstate",it.toString())
@@ -65,6 +60,8 @@ class EncryptionViewModel @Inject constructor(
                 it.data?.let {
                     state.value = state.value.copy(isloading = false)
                     Log.e("viewmodelstate",it.toString())
+                    navController.navigate(Screens.SuccessScreen.rout)
+                    resetState()
                 }
                 it.message?.let {
                     appendToMessageQueue(it)
@@ -84,5 +81,16 @@ class EncryptionViewModel @Inject constructor(
             state.value = state.value.copy(queue = queue)
         }
 
+    }
+    fun resetState(){
+        state.value = state.value.copy(
+            isloading = false,
+            filename= "No File Selected Yet",
+            fileType = "application/pdf",
+            fileBytes = "".toByteArray(),
+            encryType = "AES/CBC/NoPadding",
+            userid= null,
+            queue = Queue(mutableListOf())
+        )
     }
 }

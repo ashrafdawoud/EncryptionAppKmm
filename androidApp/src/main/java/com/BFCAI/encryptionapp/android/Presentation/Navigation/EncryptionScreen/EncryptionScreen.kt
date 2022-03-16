@@ -35,9 +35,9 @@ fun EncryptionScreen(
     navController: NavController,
     state:EncryptionScreenState,
     onTriggerEvent:(EncryptionScreenEvents)->Unit,
-    uploadfiles:()->Unit
+    uploadfiles:(NavController)->Unit
     ) {
-    val fileTypes = listOf("pdf", "audio/mp3", "video/mp4", "image/jpeg")
+    val fileTypes = listOf("application/pdf", "audio/mp3", "video/mp4", "image/jpeg")
     val encryptTypes = listOf(
         "AES/CBC/NoPadding",
         "AES/CBC/PKCS7Padding",
@@ -167,7 +167,7 @@ fun EncryptionScreen(
                     )
                     Button(
                         onClick = {
-                            onTriggerEvent(EncryptionScreenEvents.upload_file)
+                            uploadfiles(navController)
                         },
                         colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.secondary),
                         modifier = Modifier
