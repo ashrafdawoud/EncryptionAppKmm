@@ -6,7 +6,7 @@ Project is created with:
 * kotlin : 1.6.10
 * swiftUi : ###
 * Kmm plugin : 0.3.0
-* Kto: 1.6.7
+* Ktor: 1.6.7
 * serialization : 1.6.7
 * sqldelight : 1.5.3
 * back4app servier side 
