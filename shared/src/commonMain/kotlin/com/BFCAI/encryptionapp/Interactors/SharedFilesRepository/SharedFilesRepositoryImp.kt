@@ -11,10 +11,10 @@ import kotlinx.coroutines.flow.flow
 class SharedFilesRepositoryImp constructor(
     private val sharedFilesInterface: SharedFilesInterface
 ) :SharedFilesReposioty{
-    override suspend fun getAllFiles(senderId: String): Flow<DataState<SharedFilesModel>> = flow{
+    override suspend fun getAllFiles(senderId: String,token:String): Flow<DataState<SharedFilesModel>> = flow{
         emit(DataState.loading())
         try {
-            val sharedfilesModel = sharedFilesInterface.getAllFiles(senderId)
+            val sharedfilesModel = sharedFilesInterface.getAllFiles(senderId,token)
             emit(DataState.data(message = null , data = sharedfilesModel))
         }catch (e:Exception){
             var message=e.message.toString()
@@ -32,10 +32,10 @@ class SharedFilesRepositoryImp constructor(
         }
     }
 
-    override suspend fun deleteFiles(objectId: String): Flow<DataState<String>> = flow{
+    override suspend fun deleteFiles(objectId: String,token:String): Flow<DataState<String>> = flow{
         emit(DataState.loading())
         try {
-            val deletestring = sharedFilesInterface.deleteFiles(objectId)
+            val deletestring = sharedFilesInterface.deleteFiles(objectId,token)
             emit(DataState.data(message = null , data = deletestring))
         }catch (e:Exception){
             var message=e.message.toString()

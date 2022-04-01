@@ -13,10 +13,10 @@ import kotlinx.coroutines.flow.flow
 class UserFileRepositoryImp constructor(
         val uploadInterface:UserFilesInterface
     ) :UserFileRepository {
-    override suspend fun uploadFile(file: ByteArray,filename :String,filetype :String,encryptionTool :String,userid :String): Flow<DataState<String>> = flow{
+    override suspend fun uploadFile(file: ByteArray,filename :String,filetype :String,encryptionTool :String,userid :String,token:String): Flow<DataState<String>> = flow{
         emit(DataState.loading())
         try {
-            val data = uploadInterface.uploadFile(file ,filename,filetype,encryptionTool,userid)
+            val data = uploadInterface.uploadFile(file ,filename,filetype,encryptionTool,userid,token)
             emit(DataState.data(message = null,data = data))
         }catch (e:Exception) {
             if (e is ClientRequestException) {
@@ -46,10 +46,10 @@ class UserFileRepositoryImp constructor(
         }
     }
 
-    override suspend fun getAllFiles(userId: String): Flow<DataState<UserFilesModel>> = flow{
+    override suspend fun getAllFiles(userId: String,token:String): Flow<DataState<UserFilesModel>> = flow{
         emit(DataState.loading())
         try {
-            val userFilesModel = uploadInterface.getAllFiles(userId)
+            val userFilesModel = uploadInterface.getAllFiles(userId,token)
             emit(DataState.data(data = userFilesModel , message = null))
         }catch (e:Exception){
             emit(
@@ -65,10 +65,10 @@ class UserFileRepositoryImp constructor(
         }
     }
 
-    override suspend fun deleteFile(objectId: String): Flow<DataState<String>> = flow{
+    override suspend fun deleteFile(objectId: String,token:String): Flow<DataState<String>> = flow{
        emit(DataState.loading())
         try {
-            val result = uploadInterface.deleteFile(objectId = objectId)
+            val result = uploadInterface.deleteFile(objectId = objectId,token)
             if (result.equals("sucsess")){
                 emit(DataState.data(data = result , message = null))
             }else{

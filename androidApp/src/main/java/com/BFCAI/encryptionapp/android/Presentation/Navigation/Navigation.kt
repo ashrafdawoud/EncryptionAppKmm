@@ -23,7 +23,9 @@ import com.BFCAI.encryptionapp.android.Presentation.Navigation.LoginScreen.Login
 import com.BFCAI.encryptionapp.android.Presentation.Navigation.MyFileScreen.MyFilesScreen
 import com.BFCAI.encryptionapp.android.Presentation.Navigation.MyFileScreen.UserFilesViewModel
 import com.BFCAI.encryptionapp.android.Presentation.Navigation.ProfileScreen.ProfileScreen
+import com.BFCAI.encryptionapp.android.Presentation.Navigation.SearchScreen.SearchScreen
 import com.BFCAI.encryptionapp.android.Presentation.Navigation.SendScreen.SendScreen
+import com.BFCAI.encryptionapp.android.Presentation.Navigation.SendScreen.SendViewModel
 import com.BFCAI.encryptionapp.android.Presentation.Navigation.SentFileScreen.SentFilesScreen
 import com.BFCAI.encryptionapp.android.Presentation.Navigation.SentFileScreen.SentFilesViewModel
 import com.BFCAI.encryptionapp.android.Presentation.Navigation.SignUpScreen.SignUpScreen
@@ -102,7 +104,13 @@ fun Navigation (acivity: ViewModelStoreOwner,activity2:Activity){
             )
         }
         composable(route = Screens.SendScreen.rout) { navBackStackEntry ->
-            SendScreen(navController)
+            val factory = HiltViewModelFactory(LocalContext.current, navBackStackEntry)
+            val sendViewModel: SendViewModel = viewModel(acivity,"SendViewModel",factory)
+            SendScreen(
+                navController = navController ,
+                state = sendViewModel.state.value,
+                event = sendViewModel::onTriggerEnvent
+            )
         }
         composable(route = Screens.ProfileScreen.rout) { navBackStackEntry ->
             ProfileScreen(navController)
@@ -119,6 +127,12 @@ fun Navigation (acivity: ViewModelStoreOwner,activity2:Activity){
         }
         composable(route = Screens.SuccessScreen.rout) { navBackStackEntry ->
             SuccessScreen(navController)
+        }
+        composable(route = Screens.SearchScreen.rout) { navBackStackEntry ->
+            SearchScreen(
+                navController = navController,
+                //state = notyet
+         )
         }
     }
 

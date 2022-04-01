@@ -32,7 +32,11 @@ class UserFilesViewModel @Inject constructor(
             context.getSharedPreferences(
                 PublicData.GENERAL_PREF,
                 AppCompatActivity.MODE_PRIVATE
-            ).getString("User_Id", "")!!
+            ).getString("User_Id", "")!!,
+            context.getSharedPreferences(
+                PublicData.GENERAL_PREF,
+                AppCompatActivity.MODE_PRIVATE
+            ).getString("user_token", "")!!
         )
     }
 
@@ -42,11 +46,23 @@ class UserFilesViewModel @Inject constructor(
                 cardClicked(event.cardClicked)
             }
             is UserFilesEvent.refreshListner -> {
-                getAllUserFiles(event.userId)
+                getAllUserFiles(
+                    event.userId,
+                    context.getSharedPreferences(
+                        PublicData.GENERAL_PREF,
+                        AppCompatActivity.MODE_PRIVATE
+                    ).getString("user_token", "")!!
+                )
             }
             is UserFilesEvent.deleteFile -> {
                 state.value = state.value.copy(cardisClicked = true)
-                deleteUserFile(event.objectId)
+                deleteUserFile(
+                    event.objectId,
+                    context.getSharedPreferences(
+                        PublicData.GENERAL_PREF,
+                        AppCompatActivity.MODE_PRIVATE
+                    ).getString("user_token", "")!!
+                )
             }
         }
     }
@@ -55,9 +71,9 @@ class UserFilesViewModel @Inject constructor(
         state.value = state.value.copy(cardisClicked = statevalue)
     }
 
-    fun getAllUserFiles(userId: String) {
+    fun getAllUserFiles(userId: String,token:String) {
         viewModelScope.launch {
-            userFileRepositoryImp.getAllFiles(userId)
+            userFileRepositoryImp.getAllFiles(userId,token)
                 .onEach {
                     it.isLoading?.let {
                         state.value = state.value.copy(isloading = it)
@@ -74,9 +90,9 @@ class UserFilesViewModel @Inject constructor(
         }
     }
 
-    fun deleteUserFile(objectId: String) {
+    fun deleteUserFile(objectId: String,token:String) {
         viewModelScope.launch {
-            userFileRepositoryImp.deleteFile(objectId)
+            userFileRepositoryImp.deleteFile(objectId,token)
                 .onEach {
                     it.data?.let {
                         state.value = state.value.copy(cardisClicked = false)
@@ -84,7 +100,8 @@ class UserFilesViewModel @Inject constructor(
                             context.getSharedPreferences(
                                 PublicData.GENERAL_PREF,
                                 AppCompatActivity.MODE_PRIVATE
-                            ).getString("User_Id", "")!!
+                            ).getString("User_Id", "")!!,
+                            token
                         )
                     }
                     it.message?.let {

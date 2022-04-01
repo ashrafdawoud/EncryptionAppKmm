@@ -1,6 +1,8 @@
 package com.BFCAI.encryptionapp.android.Di
 
 import com.BFCAI.encryptionapp.DataSource.Network.KtorClientFactory
+import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.SendCalls.SendInterface
+import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.SendCalls.SendInterfaceImp
 import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.SharedFilesCalls.SharedFilesINterfaceImp
 import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.SharedFilesCalls.SharedFilesInterface
 import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.UserFilesCalls.UserFilesImp
@@ -47,6 +49,15 @@ object NetworkModule {
         httpClient: HttpClient,
     ): SharedFilesInterface {
         return SharedFilesINterfaceImp(
+            client = httpClient,
+        )
+    }
+    @Singleton
+    @Provides
+    fun provideSendInterface(
+        httpClient: HttpClient,
+    ): SendInterface {
+        return SendInterfaceImp(
             client = httpClient,
         )
     }

@@ -23,7 +23,7 @@ class UserFilesImp constructor(
 
     ) : UserFilesInterface {
     @OptIn(InternalAPI::class)
-    override suspend fun uploadFile(file: ByteArray,filename :String,filetype :String,encryptionTool :String,userid :String): String {
+    override suspend fun uploadFile(file: ByteArray,filename :String,filetype :String,encryptionTool :String,userid :String ,token:String): String {
 
          val response = client.submitFormWithBinaryData<HttpResponse>(
              formData = formData {
@@ -35,6 +35,7 @@ class UserFilesImp constructor(
             headers {
                 appendAll("X-Parse-Application-Id", listOf(PublicData.Application_Id))
                 appendAll("X-Parse-REST-API-Key", listOf(PublicData.REST_API_Key))
+                append("X-Parse-Session-Token", token)
             }
              body = file
         }
@@ -47,6 +48,7 @@ class UserFilesImp constructor(
                     append("X-Parse-Application-Id", PublicData.Application_Id)
                     append("X-Parse-REST-API-Key", PublicData.REST_API_Key)
                     append("Content-Type", "application/json")
+                    append("X-Parse-Session-Token", token)
                 }
                 body = UploadFileDto(
                     file = FileDto(
@@ -70,22 +72,24 @@ class UserFilesImp constructor(
 
     }
 
-    override suspend fun getAllFiles(userid: String): UserFilesModel {
+    override suspend fun getAllFiles(userid: String,token:String): UserFilesModel {
         return client.get<UserFilesDto>{
             url("${PublicData.BASEURL}"+"classes/UserFiles?where={\"user_id\":\"$userid\"}")
             headers {
                 append("X-Parse-Application-Id",PublicData.Application_Id )
                 append("X-Parse-REST-API-Key", PublicData.REST_API_Key)
                 append("X-Parse-Revocable-Session", "1")
+                append("X-Parse-Session-Token", token)
             }
         }.toUserFilesModel()
     }
-    override suspend fun deleteFile(objectId: String):String {
+    override suspend fun deleteFile(objectId: String,token:String):String {
         val clientreq =  client.delete<HttpResponse>{
             url("${PublicData.BASEURL}"+"classes/UserFiles/$objectId")
             headers {
                 append("X-Parse-Application-Id",PublicData.Application_Id )
                 append("X-Parse-REST-API-Key", PublicData.REST_API_Key)
+                append("X-Parse-Session-Token", token)
             }
         }
         if (clientreq.status.value in 200..299){

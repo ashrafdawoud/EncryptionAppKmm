@@ -5,6 +5,6 @@ import com.BFCAI.encryptionapp.Domain.Utils.DataState
 import kotlinx.coroutines.flow.Flow
 
 interface SharedFilesReposioty {
-    suspend fun getAllFiles(senderId:String): Flow<DataState<SharedFilesModel>>
-    suspend fun deleteFiles(objectId:String):Flow<DataState<String>>
+    suspend fun getAllFiles(senderId:String,token:String): Flow<DataState<SharedFilesModel>>
+    suspend fun deleteFiles(objectId:String,token:String):Flow<DataState<String>>
 }

@@ -1,12 +1,15 @@
 package com.BFCAI.encryptionapp.android.Presentation.Navigation.EncryptionScreen
 
+import android.content.Context
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.BFCAI.encryptionapp.Domain.Utils.PublicData
 import com.BFCAI.encryptionapp.Interactors.UserFileRepository.UserFileRepositoryImp
 import com.BFCAI.encryptionapp.Presentation.EncryptionScreen.EncryptionScreenEvents
 import com.BFCAI.encryptionapp.Presentation.EncryptionScreen.EncryptionScreenState
@@ -25,7 +28,8 @@ import javax.inject.Inject
 @HiltViewModel
 class EncryptionViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val uploadFileRepositoryImp: UserFileRepositoryImp
+    private val uploadFileRepositoryImp: UserFileRepositoryImp,
+    private val context: Context
 ) : ViewModel() {
     val state: MutableState<EncryptionScreenState> = mutableStateOf(EncryptionScreenState())
 
@@ -52,6 +56,10 @@ class EncryptionViewModel @Inject constructor(
                 state.value.fileType,
                 state.value.encryType,
                 state.value.userid!!,
+                context.getSharedPreferences(
+                    PublicData.GENERAL_PREF,
+                    AppCompatActivity.MODE_PRIVATE
+                ).getString("user_token", "")!!
             ).onEach {
                 it.isLoading?.let {
                     Log.e("viewmodelstate",it.toString())

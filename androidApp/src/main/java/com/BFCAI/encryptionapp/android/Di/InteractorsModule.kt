@@ -1,8 +1,11 @@
 package com.example.food1fork.android.DI
 
+import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.SendCalls.SendInterface
 import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.SharedFilesCalls.SharedFilesInterface
 import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.UserFilesCalls.UserFilesInterface
 import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.UserCalls.UserInterface
+import com.BFCAI.encryptionapp.Interactors.SendRepository.SendRepository
+import com.BFCAI.encryptionapp.Interactors.SendRepository.SendRepositoryImp
 import com.BFCAI.encryptionapp.Interactors.SharedFilesRepository.SharedFilesRepositoryImp
 import com.BFCAI.encryptionapp.Interactors.UserFileRepository.UserFileRepositoryImp
 import com.BFCAI.encryptionapp.Interactors.UserReposetories.UserRepositoryImp
@@ -35,5 +38,12 @@ object InteractorsModule {
         sharedFilesInterface: SharedFilesInterface,
     ):SharedFilesRepositoryImp{
         return SharedFilesRepositoryImp(sharedFilesInterface)
+    }
+    @Singleton
+    @Provides
+    fun provideSendRepository(
+        sendInterface: SendInterface,
+    ):SendRepositoryImp{
+        return SendRepositoryImp(sendInterface)
     }
 }

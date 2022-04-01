@@ -14,8 +14,9 @@ sealed class Screens (
     object HomeScreen : Screens("HomeScreen",R.drawable.ic_home,"Home")
     object MyFilesScreen : Screens("MyFilesScreen",R.drawable.ic_myfiles,"MyFiles")
     object SentFilesScreen : Screens("SentFilesScreen",R.drawable.ic_sent_files,"SentFiles")
-    object SendScreen : Screens("SendScreen",R.drawable.ic_send,"Send")
+    object SendScreen : Screens("SendScreen",R.drawable.ic_send,"Contacts")
     object ProfileScreen : Screens("ProfileScreen",R.drawable.ic_account,"Profile")
     object EncryptionScreen : Screens("EncryptionScreen",null,"EncryptionScreen")
     object SuccessScreen : Screens("SuccessScreen",null,"SuccessScreen")
+    object SearchScreen : Screens("SearchScreen",null,"SearchScreen")
 }

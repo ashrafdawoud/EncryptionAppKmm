@@ -25,8 +25,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SentFilesViewModel @Inject constructor(
     val sharedFilesRepositoryImp: SharedFilesRepositoryImp,
-    val context:Context
-) :ViewModel(){
+    val context: Context
+) : ViewModel() {
     val state: MutableState<SharedFilesState> = mutableStateOf(SharedFilesState())
 
     init {
@@ -34,7 +34,12 @@ class SentFilesViewModel @Inject constructor(
             context.getSharedPreferences(
                 PublicData.GENERAL_PREF,
                 AppCompatActivity.MODE_PRIVATE
-            ).getString("User_Id", "")!!
+            ).getString("User_Id", "")!!,
+            context.getSharedPreferences(
+                PublicData.GENERAL_PREF,
+                AppCompatActivity.MODE_PRIVATE
+            ).getString("user_token", "")!!
+
         )
     }
 
@@ -44,11 +49,23 @@ class SentFilesViewModel @Inject constructor(
                 cardClicked(event.cardClicked)
             }
             is SharedFilesEvent.refreshListner -> {
-                getAllSharedFiles(event.userId)
+                getAllSharedFiles(
+                    event.userId,
+                    context.getSharedPreferences(
+                        PublicData.GENERAL_PREF,
+                        AppCompatActivity.MODE_PRIVATE
+                    ).getString("user_token", "")!!
+                )
             }
             is SharedFilesEvent.deleteFile -> {
                 state.value = state.value.copy(cardisClicked = true)
-                deleteSharedFile(event.objectId)
+                deleteSharedFile(
+                    event.objectId,
+                    context.getSharedPreferences(
+                        PublicData.GENERAL_PREF,
+                        AppCompatActivity.MODE_PRIVATE
+                    ).getString("user_token", "")!!
+                )
             }
         }
     }
@@ -57,9 +74,9 @@ class SentFilesViewModel @Inject constructor(
         state.value = state.value.copy(cardisClicked = statevalue)
     }
 
-    fun getAllSharedFiles(userId: String) {
+    fun getAllSharedFiles(userId: String, token: String) {
         viewModelScope.launch {
-            sharedFilesRepositoryImp.getAllFiles(userId)
+            sharedFilesRepositoryImp.getAllFiles(userId, token)
                 .onEach {
                     it.isLoading?.let {
                         state.value = state.value.copy(isloading = it)
@@ -77,9 +94,9 @@ class SentFilesViewModel @Inject constructor(
         }
     }
 
-    fun deleteSharedFile(objectId: String) {
+    fun deleteSharedFile(objectId: String, token: String) {
         viewModelScope.launch {
-            sharedFilesRepositoryImp.deleteFiles(objectId)
+            sharedFilesRepositoryImp.deleteFiles(objectId, token)
                 .onEach {
                     it.data?.let {
                         state.value = state.value.copy(cardisClicked = false)
@@ -87,7 +104,11 @@ class SentFilesViewModel @Inject constructor(
                             context.getSharedPreferences(
                                 PublicData.GENERAL_PREF,
                                 AppCompatActivity.MODE_PRIVATE
-                            ).getString("User_Id", "")!!
+                            ).getString("User_Id", "")!!,
+                            context.getSharedPreferences(
+                                PublicData.GENERAL_PREF,
+                                AppCompatActivity.MODE_PRIVATE
+                            ).getString("user_token", "")!!
                         )
                     }
                     it.message?.let {
