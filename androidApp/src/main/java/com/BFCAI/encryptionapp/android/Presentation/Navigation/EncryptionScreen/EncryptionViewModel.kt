@@ -68,7 +68,7 @@ class EncryptionViewModel @Inject constructor(
                 it.data?.let {
                     state.value = state.value.copy(isloading = false)
                     Log.e("viewmodelstate",it.toString())
-                    navController.navigate(Screens.SuccessScreen.rout)
+                    navController.navigate(Screens.SuccessScreen.rout+"/"+Screens.EncryptionScreen.title)
                     resetState()
                 }
                 it.message?.let {

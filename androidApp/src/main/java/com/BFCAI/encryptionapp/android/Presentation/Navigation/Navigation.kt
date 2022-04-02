@@ -24,6 +24,7 @@ import com.BFCAI.encryptionapp.android.Presentation.Navigation.MyFileScreen.MyFi
 import com.BFCAI.encryptionapp.android.Presentation.Navigation.MyFileScreen.UserFilesViewModel
 import com.BFCAI.encryptionapp.android.Presentation.Navigation.ProfileScreen.ProfileScreen
 import com.BFCAI.encryptionapp.android.Presentation.Navigation.SearchScreen.SearchScreen
+import com.BFCAI.encryptionapp.android.Presentation.Navigation.SearchScreen.SearchScreenViewModel
 import com.BFCAI.encryptionapp.android.Presentation.Navigation.SendScreen.SendScreen
 import com.BFCAI.encryptionapp.android.Presentation.Navigation.SendScreen.SendViewModel
 import com.BFCAI.encryptionapp.android.Presentation.Navigation.SentFileScreen.SentFilesScreen
@@ -37,16 +38,19 @@ import kotlinx.coroutines.delay
 @OptIn(ExperimentalMaterialApi::class)
 @ExperimentalStdlibApi
 @Composable
-fun Navigation (acivity: ViewModelStoreOwner,activity2:Activity){
+fun Navigation(acivity: ViewModelStoreOwner, activity2: Activity) {
     val navController = rememberNavController()
-    val pref = LocalContext.current.getSharedPreferences(PublicData.GENERAL_PREF, AppCompatActivity.MODE_PRIVATE)
+    val pref = LocalContext.current.getSharedPreferences(
+        PublicData.GENERAL_PREF,
+        AppCompatActivity.MODE_PRIVATE
+    )
     NavHost(navController = navController, startDestination = Screens.SplashScreen.rout) {
         composable(route = Screens.SplashScreen.rout) { navBackStackEntry ->
             SplashScreen()
             LaunchedEffect(Unit) {
                 delay(2000)
                 activity2.runOnUiThread {
-                    if (pref.getString("User_Id",null)!=null)
+                    if (pref.getString("User_Id", null) != null)
                         navController.navigate(Screens.HomeScreen.rout)
                     else
                         navController.navigate(Screens.LoginScreen.rout)
@@ -55,11 +59,11 @@ fun Navigation (acivity: ViewModelStoreOwner,activity2:Activity){
         }
         composable(route = Screens.LoginScreen.rout) { navBackStackEntry ->
             val factory = HiltViewModelFactory(LocalContext.current, navBackStackEntry)
-            val recipeListViewModel:LoginViewModel= viewModel(acivity,"LoginViewModel",factory)
+            val recipeListViewModel: LoginViewModel = viewModel(acivity, "LoginViewModel", factory)
             LoginScreen(
                 state = recipeListViewModel.state.value,
                 onTriggerEvent = recipeListViewModel::onTriggerEvent,
-                loginSuccess={
+                loginSuccess = {
                     navController.navigate(Screens.HomeScreen.rout)
                 },
                 signUpClick = {
@@ -72,12 +76,16 @@ fun Navigation (acivity: ViewModelStoreOwner,activity2:Activity){
         }
         composable(route = Screens.SignUpScreen.rout) { navBackStackEntry ->
             val factory = HiltViewModelFactory(LocalContext.current, navBackStackEntry)
-            val signupViewModel:SignUpViewModel= viewModel(acivity,"SignUpViewModel",factory)
+            val signupViewModel: SignUpViewModel = viewModel(acivity, "SignUpViewModel", factory)
             SignUpScreen(
-                state= signupViewModel.state.value,
+                state = signupViewModel.state.value,
                 onTriggerEvent = signupViewModel::onTriggerEvent,
-                signupSuccess={
-                    Toast.makeText(activity2,"We sent to your email please activate it",Toast.LENGTH_LONG).show()
+                signupSuccess = {
+                    Toast.makeText(
+                        activity2,
+                        "We sent to your email please activate it",
+                        Toast.LENGTH_LONG
+                    ).show()
                     navController.navigate(Screens.LoginScreen.rout)
                 },
             )
@@ -87,7 +95,8 @@ fun Navigation (acivity: ViewModelStoreOwner,activity2:Activity){
         }
         composable(route = Screens.MyFilesScreen.rout) { navBackStackEntry ->
             val factory = HiltViewModelFactory(LocalContext.current, navBackStackEntry)
-            val userFilesViewModel:UserFilesViewModel= viewModel(acivity,"UserFilesViewModel",factory)
+            val userFilesViewModel: UserFilesViewModel =
+                viewModel(acivity, "UserFilesViewModel", factory)
             MyFilesScreen(
                 navController = navController,
                 state = userFilesViewModel.state.value,
@@ -96,7 +105,8 @@ fun Navigation (acivity: ViewModelStoreOwner,activity2:Activity){
         }
         composable(route = Screens.SentFilesScreen.rout) { navBackStackEntry ->
             val factory = HiltViewModelFactory(LocalContext.current, navBackStackEntry)
-            val sentFilesViewModel:SentFilesViewModel= viewModel(acivity,"SentFilesViewModel",factory)
+            val sentFilesViewModel: SentFilesViewModel =
+                viewModel(acivity, "SentFilesViewModel", factory)
             SentFilesScreen(
                 navController = navController,
                 state = sentFilesViewModel.state.value,
@@ -105,9 +115,9 @@ fun Navigation (acivity: ViewModelStoreOwner,activity2:Activity){
         }
         composable(route = Screens.SendScreen.rout) { navBackStackEntry ->
             val factory = HiltViewModelFactory(LocalContext.current, navBackStackEntry)
-            val sendViewModel: SendViewModel = viewModel(acivity,"SendViewModel",factory)
+            val sendViewModel: SendViewModel = viewModel(acivity, "SendViewModel", factory)
             SendScreen(
-                navController = navController ,
+                navController = navController,
                 state = sendViewModel.state.value,
                 event = sendViewModel::onTriggerEnvent
             )
@@ -117,22 +127,27 @@ fun Navigation (acivity: ViewModelStoreOwner,activity2:Activity){
         }
         composable(route = Screens.EncryptionScreen.rout) { navBackStackEntry ->
             val factory = HiltViewModelFactory(LocalContext.current, navBackStackEntry)
-            val encryptionViewModel:EncryptionViewModel= viewModel(acivity,"EncryptionViewModel",factory)
+            val encryptionViewModel: EncryptionViewModel =
+                viewModel(acivity, "EncryptionViewModel", factory)
             EncryptionScreen(
-               navController =  navController,
+                navController = navController,
                 state = encryptionViewModel.state.value,
                 onTriggerEvent = encryptionViewModel::onTriggerEvent,
-                uploadfiles = encryptionViewModel:: uploadfiles
+                uploadfiles = encryptionViewModel::uploadfiles
             )
         }
-        composable(route = Screens.SuccessScreen.rout) { navBackStackEntry ->
-            SuccessScreen(navController)
+        composable(route = Screens.SuccessScreen.rout+"/{Screen}") { navBackStackEntry ->
+            SuccessScreen(navController , navBackStackEntry.arguments?.getString("Screen")!!)
         }
         composable(route = Screens.SearchScreen.rout) { navBackStackEntry ->
+            val factory = HiltViewModelFactory(LocalContext.current, navBackStackEntry)
+            val viewmodel: SearchScreenViewModel =
+                viewModel(acivity, "SearchScreenViewModel", factory)
             SearchScreen(
                 navController = navController,
-                //state = notyet
-         )
+                state = viewmodel.state.value,
+                event = viewmodel::onTriggerEvent
+            )
         }
     }
 

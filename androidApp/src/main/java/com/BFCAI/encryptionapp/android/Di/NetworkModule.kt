@@ -1,6 +1,8 @@
 package com.BFCAI.encryptionapp.android.Di
 
 import com.BFCAI.encryptionapp.DataSource.Network.KtorClientFactory
+import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.SearchScreenCalls.SearchScreenInterface
+import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.SearchScreenCalls.SearchScreenInterfaceImp
 import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.SendCalls.SendInterface
 import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.SendCalls.SendInterfaceImp
 import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.SharedFilesCalls.SharedFilesINterfaceImp
@@ -59,6 +61,15 @@ object NetworkModule {
     ): SendInterface {
         return SendInterfaceImp(
             client = httpClient,
+        )
+    }
+    @Singleton
+    @Provides
+    fun provideSearchScreenInterface(
+        httpClient: HttpClient,
+    ): SearchScreenInterface {
+        return SearchScreenInterfaceImp(
+            httpClient = httpClient,
         )
     }
 }

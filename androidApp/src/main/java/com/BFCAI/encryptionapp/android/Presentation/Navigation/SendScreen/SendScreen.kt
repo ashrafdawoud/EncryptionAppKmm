@@ -64,7 +64,9 @@ fun SendScreen(
                         backgroundColor = Color.White
                     )
                 },
-                modifier = Modifier.fillMaxSize().fillMaxHeight()
+                modifier = Modifier
+                    .fillMaxSize()
+                    .fillMaxHeight()
             ) {
                 Column(
                     modifier = Modifier.padding(
@@ -91,7 +93,7 @@ fun SendScreen(
                                 shape = MaterialTheme.shapes.large
                             )
                             .height(45.dp)
-                            .clickable (
+                            .clickable(
                                 onClick = {
                                     navController.navigate(Screens.SearchScreen.rout)
                                 }
@@ -118,14 +120,19 @@ fun SendScreen(
 
                     } else if (!state.isloading && state.data == null) {
                         NoDataComponent()
-                    } else {
-                        LazyColumn {
-                            itemsIndexed(
-                                state.data!!.results
-                            ) { index, item ->
-                                ContactsComponent(item = item, state = state, event = event)
+                    } else if (state.data != null){
+                        if (state.data!!.results.isEmpty()){
+                            NoDataComponent()
+                        }else{
+                            LazyColumn {
+                                itemsIndexed(
+                                    state.data!!.results
+                                ) { index, item ->
+                                    ContactsComponent(item = item, state = state, event = event)
+                                }
                             }
                         }
+
                     }
                 }
             }

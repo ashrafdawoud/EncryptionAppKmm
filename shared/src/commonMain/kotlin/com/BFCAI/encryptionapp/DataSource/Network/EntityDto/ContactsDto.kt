@@ -9,6 +9,11 @@ data class ContactsDto(
     val results : List<ContactsItemDto>
 )
 @Serializable
+data class ContactsCopyDto(
+    @SerialName("results")
+    val results : List<SingleContactDto>
+)
+@Serializable
 data class ContactsItemDto(
     @SerialName("objectId")
     val objectId:String,
@@ -29,5 +34,7 @@ data class SingleContactDto(
     val username:String,
     @SerialName("emailVerified")
     val emailVerified:Boolean,
+    @SerialName("emailCopy")
+    val emailCopy:String,
 )
 
