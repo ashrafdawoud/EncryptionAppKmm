@@ -41,7 +41,7 @@ class UserInterfaceImp(
             }
            contentType(ContentType.Application.Json)
 
-            body = SignUpDto(email = email, password = password, username = username)
+            body = SignUpDto(email = email, password = password, username = username, emailCopy = email)
         }
         if ( response.status.value in 200..299){
             return "Success"

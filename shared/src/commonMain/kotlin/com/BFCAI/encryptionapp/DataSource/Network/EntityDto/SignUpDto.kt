@@ -7,4 +7,5 @@ data class SignUpDto(
     val password:String,
     val username:String,
     val email:String,
+    val emailCopy:String,
 )

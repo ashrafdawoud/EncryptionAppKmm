@@ -1,8 +1,14 @@
 package com.BFCAI.encryptionapp.android.Di
 
 import com.BFCAI.encryptionapp.DataSource.Network.KtorClientFactory
-import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.UploudFilesCalls.UploadFileImp
-import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.UploudFilesCalls.UploadFileInterface
+import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.SearchScreenCalls.SearchScreenInterface
+import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.SearchScreenCalls.SearchScreenInterfaceImp
+import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.SendCalls.SendInterface
+import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.SendCalls.SendInterfaceImp
+import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.SharedFilesCalls.SharedFilesINterfaceImp
+import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.SharedFilesCalls.SharedFilesInterface
+import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.UserFilesCalls.UserFilesImp
+import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.UserFilesCalls.UserFilesInterface
 import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.UserCalls.UserInterface
 import com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.UserCalls.UserInterfaceImp
 import dagger.Module
@@ -34,9 +40,36 @@ object NetworkModule {
     @Provides
     fun provideUploadFileInterface(
         httpClient: HttpClient,
-    ): UploadFileInterface {
-        return UploadFileImp(
+    ): UserFilesInterface {
+        return UserFilesImp(
             client = httpClient,
+        )
+    }
+    @Singleton
+    @Provides
+    fun provideSharedfileInterface(
+        httpClient: HttpClient,
+    ): SharedFilesInterface {
+        return SharedFilesINterfaceImp(
+            client = httpClient,
+        )
+    }
+    @Singleton
+    @Provides
+    fun provideSendInterface(
+        httpClient: HttpClient,
+    ): SendInterface {
+        return SendInterfaceImp(
+            client = httpClient,
+        )
+    }
+    @Singleton
+    @Provides
+    fun provideSearchScreenInterface(
+        httpClient: HttpClient,
+    ): SearchScreenInterface {
+        return SearchScreenInterfaceImp(
+            httpClient = httpClient,
         )
     }
 }

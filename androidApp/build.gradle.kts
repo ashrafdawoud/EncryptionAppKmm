@@ -83,6 +83,8 @@ dependencies {
         // UI Tests
         androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.0.5")
         implementation("io.coil-kt:coil-compose:1.4.0")
+        implementation ("com.google.accompanist:accompanist-swiperefresh:0.24.3-alpha")
+        implementation ("com.google.accompanist:accompanist-webview:0.24.3-alpha")
     }
 
 }
