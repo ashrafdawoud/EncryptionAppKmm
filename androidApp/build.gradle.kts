@@ -58,6 +58,11 @@ dependencies {
     implementation("io.ktor:ktor-client-android:1.5.2")
     implementation ("androidx.constraintlayout:constraintlayout-compose:1.0.0-beta02")
 /////////////////
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.3")
+    androidTestImplementation("androidx.test.ext:junit-ktx:1.1.3")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    ////////////////////////////////////////////////////////
     dependencies {
         implementation("androidx.compose.ui:ui:1.0.5")
         // Tooling support (Previews, etc.)

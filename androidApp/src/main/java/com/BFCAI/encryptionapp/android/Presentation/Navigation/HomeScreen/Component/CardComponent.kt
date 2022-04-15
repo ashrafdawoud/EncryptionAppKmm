@@ -61,7 +61,7 @@ fun CardComponent(navController: NavController) {
                     modifier = Modifier
                         .padding(start = 10.dp, end = 10.dp)
                         .size(20.dp),
-                    painter = painterResource(id = R.drawable.ic_lock_solid),
+                    painter = painterResource(id = R.drawable.ic_send),
                     contentDescription = null,
                     tint = Color.White,
 
@@ -112,7 +112,7 @@ fun CardComponent(navController: NavController) {
                     modifier = Modifier
                         .padding(start = 10.dp, end = 10.dp)
                         .size(20.dp),
-                    painter = painterResource(id = R.drawable.ic_lock_solid),
+                    painter = painterResource(id = R.drawable.ic_send),
                     contentDescription = null,
                     tint = Color.White,
 
