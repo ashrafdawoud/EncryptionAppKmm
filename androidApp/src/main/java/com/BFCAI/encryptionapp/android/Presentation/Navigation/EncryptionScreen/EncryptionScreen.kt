@@ -39,11 +39,10 @@ fun EncryptionScreen(
     ) {
     val fileTypes = listOf("application/pdf", "audio/mp3", "video/mp4", "image/jpeg")
     val encryptTypes = listOf(
-        "AES/CBC/NoPadding",
-        "AES/CBC/PKCS7Padding",
-        "AES/CTR/NoPadding",
-        "AES/ECB/NoPadding",
-        "RSA/ECB/OAEPWithSHA-1AndMGF1Padding"
+        "AES (Advanced Encryption System)",
+        "DES (Data Encryption System)",
+        "BLOWFISH",
+        "DESede",
     )
 
     var fileTypesPeriodExpanded by remember { mutableStateOf(false) }

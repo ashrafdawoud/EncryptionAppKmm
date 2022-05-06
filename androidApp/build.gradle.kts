@@ -10,7 +10,7 @@ android {
     compileSdk = 31
     defaultConfig {
         applicationId = "com.BFCAI.encryptionapp.android"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 31
         versionCode = 1
         versionName = "1.0"
@@ -47,6 +47,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.0")
     implementation("com.google.accompanist:accompanist-coil:0.10.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
+    implementation("androidx.security:security-crypto-ktx:1.1.0-alpha03")
     // Integration with observables
     val composeActivitiesVersion = "1.3.0-beta01"
     implementation("androidx.activity:activity-compose:${composeActivitiesVersion}")

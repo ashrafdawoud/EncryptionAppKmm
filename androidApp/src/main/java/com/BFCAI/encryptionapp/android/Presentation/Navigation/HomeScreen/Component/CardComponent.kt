@@ -86,56 +86,6 @@ fun CardComponent(navController: NavController) {
                 }
             }
         }
-        Box(
-            modifier = Modifier
-                .padding(top = 20.dp)
-                .background(
-                    color = MaterialTheme.colors.surface,
-                    shape = MaterialTheme.shapes.large
-                )
-                .fillMaxWidth()
-                .clickable(
-                    enabled = true,
-                    interactionSource = interactionSource2,
-                    indication = LocalIndication.current,
-                    onClick = { }
-                ),
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 20.dp, end = 20.dp, top = 15.dp, bottom = 15.dp),
-                verticalAlignment = Alignment.CenterVertically
 
-            ) {
-                Icon(
-                    modifier = Modifier
-                        .padding(start = 10.dp, end = 10.dp)
-                        .size(20.dp),
-                    painter = painterResource(id = R.drawable.ic_send),
-                    contentDescription = null,
-                    tint = Color.White,
-
-                    )
-                Column(
-                    modifier = Modifier
-                        .padding(5.dp)
-                        .fillMaxWidth(),
-                ) {
-                    Text(
-                        text = "Decryption",
-                        style = MaterialTheme.typography.h4,
-                        color = Color.White,
-                        modifier = Modifier.padding(start = 10.dp, end = 10.dp, bottom = 2.dp),
-                    )
-                    Text(
-                        text = "Decrypt files ( file , audio , video ) ",
-                        style = MaterialTheme.typography.body2,
-                        color = Color.Gray,
-                        modifier = Modifier.padding(start = 10.dp, end = 10.dp, top = 2.dp),
-                    )
-                }
-            }
-        }
     }
 }

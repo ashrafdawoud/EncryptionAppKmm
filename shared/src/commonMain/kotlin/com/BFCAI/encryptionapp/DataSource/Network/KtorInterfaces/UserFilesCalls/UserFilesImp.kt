@@ -1,10 +1,7 @@
 package com.BFCAI.encryptionapp.DataSource.Network.KtorInterfaces.UserFilesCalls
 
 import android.util.Log
-import com.BFCAI.encryptionapp.DataSource.Network.EntityDto.FileDto
-import com.BFCAI.encryptionapp.DataSource.Network.EntityDto.UploadFileDto
-import com.BFCAI.encryptionapp.DataSource.Network.EntityDto.UserDto
-import com.BFCAI.encryptionapp.DataSource.Network.EntityDto.UserFilesDto
+import com.BFCAI.encryptionapp.DataSource.Network.EntityDto.*
 import com.BFCAI.encryptionapp.DataSource.Network.Mappers.toUserFilesModel
 import com.BFCAI.encryptionapp.DataSource.Network.Mappers.toUserModel
 import com.BFCAI.encryptionapp.Domain.Model.UserFilesModel
@@ -91,6 +88,45 @@ class UserFilesImp constructor(
                 append("X-Parse-REST-API-Key", PublicData.REST_API_Key)
                 append("X-Parse-Session-Token", token)
             }
+        }
+        if (clientreq.status.value in 200..299){
+            return "sucsess"
+        }else{
+            return "fail"
+        }
+    }
+
+    override suspend fun shareFile(
+        fileId: String,
+        senderId: String,
+        reciverid: String,
+        token: String
+    ): String {
+        val clientreq =  client.post<HttpResponse>{
+            url(PublicData.BASEURL +"classes/SharedFiles")
+            headers {
+                append("X-Parse-Application-Id",PublicData.Application_Id )
+                append("X-Parse-REST-API-Key", PublicData.REST_API_Key)
+                append("X-Parse-Session-Token", token)
+                append("Content-Type", "application/json")
+            }
+            body = ShareFileDto(
+                ObjectDto(
+                    __type = "Pointer",
+                    className = "UserFiles",
+                    objectId = fileId
+                ),
+                ObjectDto(
+                    __type = "Pointer",
+                    className = "_User",
+                    objectId = senderId
+                ),
+                ObjectDto(
+                    __type = "Pointer",
+                    className = "_User",
+                    objectId = reciverid
+                ),
+            )
         }
         if (clientreq.status.value in 200..299){
             return "sucsess"

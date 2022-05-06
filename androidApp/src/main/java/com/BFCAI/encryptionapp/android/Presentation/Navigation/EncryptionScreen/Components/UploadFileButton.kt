@@ -2,11 +2,13 @@ package com.BFCAI.encryptionapp.android.Presentation.Navigation.EncryptionScreen
 
 import android.database.Cursor
 import android.net.Uri
+import android.os.Build
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -25,10 +27,15 @@ import androidx.navigation.NavController
 import com.BFCAI.encryptionapp.Domain.Utils.PublicData
 import com.BFCAI.encryptionapp.Presentation.EncryptionScreen.EncryptionScreenEvents
 import com.BFCAI.encryptionapp.Presentation.EncryptionScreen.EncryptionScreenState
+import com.BFCAI.encryptionapp.android.EncryptionAlgorisms.AEScipherEncrypt
+import com.BFCAI.encryptionapp.android.EncryptionAlgorisms.BLOWFISHcipherEncrypt
+import com.BFCAI.encryptionapp.android.EncryptionAlgorisms.DESedecipherEncrypt
+import com.BFCAI.encryptionapp.android.EncryptionAlgorisms.DetectEncryptionAlgorism
 import io.ktor.http.*
 import java.io.File
 
 
+@RequiresApi(Build.VERSION_CODES.M)
 @Composable
 fun UploadFileButton(
     state: EncryptionScreenState,

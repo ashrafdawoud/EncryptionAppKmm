@@ -1,4 +1,4 @@
-package com.BFCAI.encryptionapp.android.Presentation.Navigation.SendScreen
+package com.BFCAI.encryptionapp.android.Presentation.Navigation.ContactScreen
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.BFCAI.encryptionapp.Domain.Utils.PublicData
 import com.BFCAI.encryptionapp.Interactors.SendRepository.SendRepository
-import com.BFCAI.encryptionapp.Interactors.SendRepository.SendRepositoryImp
 import com.BFCAI.encryptionapp.Presentation.SendScreen.SendScreenEvent
 import com.BFCAI.encryptionapp.Presentation.SendScreen.SendScreenState
 import com.example.food2fork.Food2ForkKmm.Domain.Model.GenericMessageInfo
@@ -21,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SendViewModel  @Inject constructor(
-    private val sendRepositoryImp: SendRepositoryImp,
+    private val sendRepository: SendRepository,
     private val context: Context
 ) : ViewModel(){
     val state :MutableState<SendScreenState> = mutableStateOf(SendScreenState())
@@ -66,7 +65,7 @@ class SendViewModel  @Inject constructor(
 
     fun getAllData(token:String , contact1:String){
         viewModelScope.launch {
-            sendRepositoryImp.getMyContacts(token , contact1).onEach {
+            sendRepository.getMyContacts(token , contact1).onEach {
                 it.isLoading?.let {
                     state.value = state.value.copy(isloading = it)
                 }
@@ -81,7 +80,7 @@ class SendViewModel  @Inject constructor(
     }
     fun deleteContact(token:String , contactId:String){
         viewModelScope.launch {
-            sendRepositoryImp.deleteOneContact(token = token , contactId = contactId).onEach {
+            sendRepository.deleteOneContact(token = token , contactId = contactId).onEach {
                 it.isLoading?.let {
                     state.value = state.value.copy(isloading = it)
                 }

@@ -8,5 +8,6 @@ interface UserFileRepository {
     suspend fun uploadFile(file: ByteArray,filename :String,filetype :String,encryptionTool :String,userid :String,token:String) : Flow<DataState<String>>
     suspend fun getAllFiles(userId:String,token:String) : Flow<DataState<UserFilesModel>>
     suspend fun deleteFile(objectId:String,token:String) : Flow<DataState<String>>
+    suspend fun shareFile(fileId:String,senderId:String,reciverid:String,token:String) : Flow<DataState<String>>
 
 }

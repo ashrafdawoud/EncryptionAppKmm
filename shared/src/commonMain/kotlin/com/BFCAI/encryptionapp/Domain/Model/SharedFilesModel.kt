@@ -1,6 +1,7 @@
 package com.BFCAI.encryptionapp.Domain.Model
 
 import com.BFCAI.encryptionapp.DataSource.Network.EntityDto.FileDto
+import com.BFCAI.encryptionapp.DataSource.Network.EntityDto.FilesDto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -9,16 +10,19 @@ data class SharedFilesModel(
 )
 data class SharedFilesItemModel (
     val objectId :String,
-    val encryption_tool_id :String,
-    val file_type :String,
-    val file : FileDto,
+    val fileDto :SharedfileModel,
     val sender :SenderOrReciverModel,
     val reciver :SenderOrReciverModel,
-    val password :String,
 )
 data class SenderOrReciverModel(
     val objectId:String,
     val username:String,
-    val emailVerified:Boolean,
-
+    val email:String,
+    )
+data class SharedfileModel(
+    val objectId:String,
+    val file_type:String,
+    val encryption_tool_id:String,
+    val user_id:String,
+    val file:FilesDto,
     )

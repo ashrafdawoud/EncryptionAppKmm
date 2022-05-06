@@ -30,13 +30,17 @@ fun SuccessScreen(
     var discriptionstate by remember { mutableStateOf("Success on Encrypting and Uploading Files To our Secure Servers") }
     val discription: List<String> = Arrays.asList(
         "Success on Encrypting and Uploading Files To our Secure Servers",
-        "Success on Add Contact to your Contacts List"
+        "Success on Add Contact to your Contacts List",
+        "Success on Add File to your Contact",
     )
 
     if (screenName.equals(Screens.EncryptionScreen.title)) {
         discriptionstate = discription.get(0)
     } else if (screenName.equals(Screens.SearchScreen.title)) {
         discriptionstate = discription.get(1)
+    }
+    else if (screenName.equals(Screens.ShareFileScreen.title)) {
+        discriptionstate = discription.get(2)
     }
     AppTheme(
         displayProgressBar = false,
@@ -70,6 +74,9 @@ fun SuccessScreen(
                     if (screenName.equals(Screens.EncryptionScreen.title)) {
                         navController.navigate(Screens.HomeScreen.rout)
                     } else if (screenName.equals(Screens.SearchScreen.title)) {
+                        navController.navigate(Screens.SendScreen.rout)
+                    }
+                    else if (screenName.equals(Screens.ShareFileScreen.title)) {
                         navController.navigate(Screens.SendScreen.rout)
                     }
                 },

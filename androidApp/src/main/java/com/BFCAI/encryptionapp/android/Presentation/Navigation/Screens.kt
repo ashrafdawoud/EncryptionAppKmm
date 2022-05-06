@@ -19,4 +19,5 @@ sealed class Screens (
     object EncryptionScreen : Screens("EncryptionScreen",null,"EncryptionScreen")
     object SuccessScreen : Screens("SuccessScreen",null,"SuccessScreen")
     object SearchScreen : Screens("SearchScreen",null,"SearchScreen")
+    object ShareFileScreen : Screens("ShareFileScreen",null,"ShareFileScreen")
 }

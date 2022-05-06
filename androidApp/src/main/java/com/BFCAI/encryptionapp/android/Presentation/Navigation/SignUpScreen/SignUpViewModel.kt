@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.BFCAI.encryptionapp.Interactors.UserReposetories.UserRepository
 import com.BFCAI.encryptionapp.Interactors.UserReposetories.UserRepositoryImp
 import com.BFCAI.encryptionapp.Presentation.SignUpScreen.SignupScreenEvent
 import com.BFCAI.encryptionapp.Presentation.SignUpScreen.SignupScreenState
@@ -20,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val userRepositoryImp: UserRepositoryImp
+    private val userRepositoryImp: UserRepository
 ) : ViewModel() {
     val state: MutableState<SignupScreenState> = mutableStateOf(SignupScreenState())
     fun onTriggerEvent(event: SignupScreenEvent){

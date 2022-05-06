@@ -11,7 +11,7 @@ data class EncryptionScreenState(
     var filename : String = "no file selected yet",
     var fileType : String = "application/pdf",
     var fileBytes : ByteArray = "".toByteArray(),
-    var encryType : String = "AES/CBC/NoPadding",
+    var encryType : String = "AES (Advanced Encryption System)",
     var userid : String?=null,
     val queue: Queue<GenericMessageInfo> = Queue(mutableListOf())
 )

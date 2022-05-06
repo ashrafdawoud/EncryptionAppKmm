@@ -13,7 +13,7 @@ class SharedFilesINterfaceImp constructor(
 ) : SharedFilesInterface {
     override suspend fun getAllFiles(senderId: String,token:String): SharedFilesModel {
         return client.request<SharedFilesDto> {
-            url("${PublicData.BASEURL}" + "classes/SharedFiles?include=sender&include=reciver&where={ \"reciver\":{ \"__type\": \"Pointer\", \"className\":\"_User\", \"objectId\": \"$senderId\" }}")
+            url("${PublicData.BASEURL}" + "classes/SharedFiles?include=fileDto&include=sender&include=reciver&where={ \"reciver\":{ \"__type\": \"Pointer\", \"className\":\"_User\", \"objectId\": \"$senderId\" }}")
             headers {
                 append("X-Parse-Application-Id", PublicData.Application_Id)
                 append("X-Parse-REST-API-Key", PublicData.REST_API_Key)

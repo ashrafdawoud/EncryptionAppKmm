@@ -9,6 +9,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.BFCAI.encryptionapp.Domain.Utils.PublicData
+import com.BFCAI.encryptionapp.Interactors.UserReposetories.UserRepository
 import com.BFCAI.encryptionapp.Interactors.UserReposetories.UserRepositoryImp
 import com.BFCAI.encryptionapp.Presentation.LoginScreen.LoginScreenEvent
 import com.BFCAI.encryptionapp.Presentation.LoginScreen.LoginScreenState
@@ -24,7 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val userRepositoryImp: UserRepositoryImp,
+    private val userRepositoryImp: UserRepository,
     private val context: Context
 ) : ViewModel() {
     val state: MutableState<LoginScreenState> = mutableStateOf(LoginScreenState())
@@ -46,6 +47,8 @@ class LoginViewModel @Inject constructor(
                     context.getSharedPreferences(PublicData.GENERAL_PREF, AppCompatActivity.MODE_PRIVATE)
                         .edit()
                         .putString("User_Id",it.objectId)
+                        .putString("User_Name",it.username)
+                        .putString("User_Email",it.email)
                         .putString("user_token",it.sessionToken)
                         .commit()
                     Log.e("viewmodelstate",it.toString())

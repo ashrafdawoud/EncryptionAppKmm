@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.BFCAI.encryptionapp.Domain.Model.SharedFilesModel
 import com.BFCAI.encryptionapp.Domain.Utils.PublicData
+import com.BFCAI.encryptionapp.Interactors.SharedFilesRepository.SharedFilesReposioty
 import com.BFCAI.encryptionapp.Interactors.SharedFilesRepository.SharedFilesRepositoryImp
 import com.BFCAI.encryptionapp.Presentation.SharedFilesScreen.SharedFilesEvent
 import com.BFCAI.encryptionapp.Presentation.SharedFilesScreen.SharedFilesState
@@ -24,7 +25,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SentFilesViewModel @Inject constructor(
-    val sharedFilesRepositoryImp: SharedFilesRepositoryImp,
+    val sharedFilesRepositoryImp: SharedFilesReposioty,
     val context: Context
 ) : ViewModel() {
     val state: MutableState<SharedFilesState> = mutableStateOf(SharedFilesState())

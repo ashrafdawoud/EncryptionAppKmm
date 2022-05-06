@@ -10,9 +10,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.BFCAI.encryptionapp.Domain.Utils.PublicData
+import com.BFCAI.encryptionapp.Interactors.UserFileRepository.UserFileRepository
 import com.BFCAI.encryptionapp.Interactors.UserFileRepository.UserFileRepositoryImp
 import com.BFCAI.encryptionapp.Presentation.EncryptionScreen.EncryptionScreenEvents
 import com.BFCAI.encryptionapp.Presentation.EncryptionScreen.EncryptionScreenState
+import com.BFCAI.encryptionapp.android.EncryptionAlgorisms.DetectEncryptionAlgorism
 import com.BFCAI.encryptionapp.android.Presentation.Navigation.Screens
 import com.example.food2fork.Food2ForkKmm.Domain.Model.GenericMessageInfo
 import com.example.food2fork.Food2ForkKmm.Domain.Utils.GenericMessageInfoQueueUtil
@@ -28,7 +30,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EncryptionViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val uploadFileRepositoryImp: UserFileRepositoryImp,
+    private val uploadFileRepository: UserFileRepository,
     private val context: Context
 ) : ViewModel() {
     val state: MutableState<EncryptionScreenState> = mutableStateOf(EncryptionScreenState())
@@ -50,8 +52,8 @@ class EncryptionViewModel @Inject constructor(
     @OptIn(InternalAPI::class)
     fun uploadfiles(navController: NavController) {
         viewModelScope.launch {
-            uploadFileRepositoryImp.uploadFile(
-                state.value.fileBytes,
+            uploadFileRepository.uploadFile(
+                state.value.fileBytes.DetectEncryptionAlgorism(state.value.encryType),
                 state.value.filename,
                 state.value.fileType,
                 state.value.encryType,
@@ -96,7 +98,7 @@ class EncryptionViewModel @Inject constructor(
             filename= "No File Selected Yet",
             fileType = "application/pdf",
             fileBytes = "".toByteArray(),
-            encryType = "AES/CBC/NoPadding",
+            encryType = "AES (Advanced Encryption System)",
             userid= null,
             queue = Queue(mutableListOf())
         )

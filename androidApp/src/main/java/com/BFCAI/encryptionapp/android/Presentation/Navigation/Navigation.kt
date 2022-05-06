@@ -25,10 +25,11 @@ import com.BFCAI.encryptionapp.android.Presentation.Navigation.MyFileScreen.User
 import com.BFCAI.encryptionapp.android.Presentation.Navigation.ProfileScreen.ProfileScreen
 import com.BFCAI.encryptionapp.android.Presentation.Navigation.SearchScreen.SearchScreen
 import com.BFCAI.encryptionapp.android.Presentation.Navigation.SearchScreen.SearchScreenViewModel
-import com.BFCAI.encryptionapp.android.Presentation.Navigation.SendScreen.SendScreen
-import com.BFCAI.encryptionapp.android.Presentation.Navigation.SendScreen.SendViewModel
+import com.BFCAI.encryptionapp.android.Presentation.Navigation.ContactScreen.SendScreen
+import com.BFCAI.encryptionapp.android.Presentation.Navigation.ContactScreen.SendViewModel
 import com.BFCAI.encryptionapp.android.Presentation.Navigation.SentFileScreen.SentFilesScreen
 import com.BFCAI.encryptionapp.android.Presentation.Navigation.SentFileScreen.SentFilesViewModel
+import com.BFCAI.encryptionapp.android.Presentation.Navigation.ShareFileScreen.ShareFileScreen
 import com.BFCAI.encryptionapp.android.Presentation.Navigation.SignUpScreen.SignUpScreen
 import com.BFCAI.encryptionapp.android.Presentation.Navigation.SignUpScreen.SignUpViewModel
 import com.BFCAI.encryptionapp.android.Presentation.Navigation.SplashScreen.SplashScreen
@@ -123,7 +124,14 @@ fun Navigation(acivity: ViewModelStoreOwner, activity2: Activity) {
             )
         }
         composable(route = Screens.ProfileScreen.rout) { navBackStackEntry ->
-            ProfileScreen(navController)
+            val factory = HiltViewModelFactory(LocalContext.current, navBackStackEntry)
+            val sendViewModel: SendViewModel = viewModel(acivity, "SendViewModel", factory)
+            val userFilesViewModel: UserFilesViewModel = viewModel(acivity, "UserFilesViewModel", factory)
+            ProfileScreen(
+                navController = navController,
+                sendState = sendViewModel.state.value,
+                userState = userFilesViewModel.state.value
+                )
         }
         composable(route = Screens.EncryptionScreen.rout) { navBackStackEntry ->
             val factory = HiltViewModelFactory(LocalContext.current, navBackStackEntry)
@@ -148,6 +156,12 @@ fun Navigation(acivity: ViewModelStoreOwner, activity2: Activity) {
                 state = viewmodel.state.value,
                 event = viewmodel::onTriggerEvent
             )
+        }
+        composable(route = Screens.ShareFileScreen.rout+"/{ReciverId}") { navBackStackEntry ->
+            val factory = HiltViewModelFactory(LocalContext.current, navBackStackEntry)
+            val userFilesViewModel: UserFilesViewModel =
+                viewModel(acivity, "UserFilesViewModel", factory)
+            ShareFileScreen(navController ,userFilesViewModel.state.value, userFilesViewModel::onEventTrigger , navBackStackEntry.arguments?.getString("ReciverId"))
         }
     }
 

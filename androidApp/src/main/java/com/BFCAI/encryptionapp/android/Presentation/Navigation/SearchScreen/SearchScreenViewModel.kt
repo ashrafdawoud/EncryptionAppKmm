@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.BFCAI.encryptionapp.Domain.Utils.PublicData
+import com.BFCAI.encryptionapp.Interactors.SearchScreenRepository.SearchScreenRepository
 import com.BFCAI.encryptionapp.Interactors.SearchScreenRepository.SearchScreenRepositoryImp
 import com.BFCAI.encryptionapp.Presentation.SearchScreen.SearchScreenEvent
 import com.BFCAI.encryptionapp.Presentation.SearchScreen.SearchScreenState
@@ -24,7 +25,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchScreenViewModel @Inject constructor(
-    private val searchScreenRepositoryImp: SearchScreenRepositoryImp,
+    private val searchScreenRepositoryImp: SearchScreenRepository,
     private val context: Context
 ) : ViewModel() {
 

@@ -1,7 +1,5 @@
-package com.BFCAI.encryptionapp.android.Presentation.Navigation.SendScreen
+package com.BFCAI.encryptionapp.android.Presentation.Navigation.ContactScreen
 
-import android.graphics.drawable.PaintDrawable
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,15 +16,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.BFCAI.encryptionapp.Domain.Utils.PublicData
 import com.BFCAI.encryptionapp.Presentation.SendScreen.SendScreenEvent
 import com.BFCAI.encryptionapp.Presentation.SendScreen.SendScreenState
-import com.BFCAI.encryptionapp.Presentation.SharedFilesScreen.SharedFilesEvent
 import com.BFCAI.encryptionapp.android.Presentation.Component.BottomNavigationBar
 import com.BFCAI.encryptionapp.android.Presentation.Component.NoDataComponent
-import com.BFCAI.encryptionapp.android.Presentation.Navigation.MyFileScreen.Component.UserFileCard
 import com.BFCAI.encryptionapp.android.Presentation.Navigation.Screens
-import com.BFCAI.encryptionapp.android.Presentation.Navigation.SendScreen.Component.ContactsComponent
+import com.BFCAI.encryptionapp.android.Presentation.Navigation.ContactScreen.Component.ContactsComponent
 import com.BFCAI.encryptionapp.android.R
 import com.example.food1fork.android.Presentation.Theme.AppTheme
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -128,7 +123,7 @@ fun SendScreen(
                                 itemsIndexed(
                                     state.data!!.results
                                 ) { index, item ->
-                                    ContactsComponent(item = item, state = state, event = event)
+                                    ContactsComponent(item = item, state = state, event = event , navController = navController)
                                 }
                             }
                         }

@@ -9,11 +9,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.BFCAI.encryptionapp.Domain.Utils.PublicData
 import com.BFCAI.encryptionapp.Interactors.UserFileRepository.UserFileRepository
-import com.BFCAI.encryptionapp.Interactors.UserFileRepository.UserFileRepositoryImp
 import com.BFCAI.encryptionapp.Presentation.UserFilesScreen.UserFilesEvent
 import com.BFCAI.encryptionapp.Presentation.UserFilesScreen.UserFilesState
 import com.example.food2fork.Food2ForkKmm.Domain.Model.GenericMessageInfo
 import com.example.food2fork.Food2ForkKmm.Domain.Utils.GenericMessageInfoQueueUtil
+import com.example.food2fork.Food2ForkKmm.Domain.Utils.Queue
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -22,7 +22,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserFilesViewModel @Inject constructor(
-    private val userFileRepositoryImp: UserFileRepositoryImp,
+    private val userFileRepository: UserFileRepository,
     private val context: Context
 ) : ViewModel() {
     val state: MutableState<UserFilesState> = mutableStateOf(UserFilesState())
@@ -64,6 +64,31 @@ class UserFilesViewModel @Inject constructor(
                     ).getString("user_token", "")!!
                 )
             }
+            is UserFilesEvent.shareFile -> {
+                shareFile(
+                    fileId = event.fileId,
+                    senderId = event.senderid,
+                    reciverid = event.reciverId,
+                    context.getSharedPreferences(
+                        PublicData.GENERAL_PREF,
+                        AppCompatActivity.MODE_PRIVATE
+                    ).getString("user_token", "")!!
+                )
+            }
+
+            is UserFilesEvent.resetState -> {
+                state.value =state.value.copy(isloading = false , uploaded = null , data = null , queue =  Queue(mutableListOf()) , cardisClicked = false )
+                getAllUserFiles(
+                    context.getSharedPreferences(
+                        PublicData.GENERAL_PREF,
+                        AppCompatActivity.MODE_PRIVATE
+                    ).getString("User_Id", "")!!,
+                    context.getSharedPreferences(
+                        PublicData.GENERAL_PREF,
+                        AppCompatActivity.MODE_PRIVATE
+                    ).getString("user_token", "")!!
+                )
+            }
         }
     }
 
@@ -71,11 +96,11 @@ class UserFilesViewModel @Inject constructor(
         state.value = state.value.copy(cardisClicked = statevalue)
     }
 
-    fun getAllUserFiles(userId: String,token:String) {
+    fun getAllUserFiles(userId: String, token: String) {
         viewModelScope.launch {
-            userFileRepositoryImp.getAllFiles(userId,token)
+            userFileRepository.getAllFiles(userId, token)
                 .onEach {
-                    it.isLoading?.let {
+                    it.isLoading.let {
                         state.value = state.value.copy(isloading = it)
                     }
                     it.data?.let {
@@ -90,9 +115,9 @@ class UserFilesViewModel @Inject constructor(
         }
     }
 
-    fun deleteUserFile(objectId: String,token:String) {
+    fun deleteUserFile(objectId: String, token: String) {
         viewModelScope.launch {
-            userFileRepositoryImp.deleteFile(objectId,token)
+            userFileRepository.deleteFile(objectId, token)
                 .onEach {
                     it.data?.let {
                         state.value = state.value.copy(cardisClicked = false)
@@ -111,6 +136,29 @@ class UserFilesViewModel @Inject constructor(
         }
     }
 
+    fun shareFile(
+        fileId: String,
+        senderId: String,
+        reciverid: String,
+        token: String
+    ) {
+        viewModelScope.launch {
+            userFileRepository.shareFile(fileId, senderId, reciverid, token)
+                .onEach {
+                    it.isLoading.let {
+                        state.value = state.value.copy(isloading = it)
+                    }
+                    it.data?.let {
+                        state.value = state.value.copy(uploaded = it)
+                    }
+                    it.message?.let {
+                        appendToMessageQueue(it)
+                    }
+                }.launchIn(viewModelScope)
+        }
+    }
+
+
     fun appendToMessageQueue(messageInfo: GenericMessageInfo.Builder) {
         if (!GenericMessageInfoQueueUtil().doesMessageIsAlreadyExistOnQueue(
                 state.value.queue,
@@ -121,6 +169,7 @@ class UserFilesViewModel @Inject constructor(
             queue.add(messageInfo.build())
             state.value = state.value.copy(queue = queue)
         }
+
 
     }
 }

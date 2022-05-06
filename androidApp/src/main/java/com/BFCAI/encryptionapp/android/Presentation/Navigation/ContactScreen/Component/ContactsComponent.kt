@@ -1,4 +1,4 @@
-package com.BFCAI.encryptionapp.android.Presentation.Navigation.SendScreen.Component
+package com.BFCAI.encryptionapp.android.Presentation.Navigation.ContactScreen.Component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -13,18 +13,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.BFCAI.encryptionapp.Domain.Model.ContactsItemModel
-import com.BFCAI.encryptionapp.Domain.Model.ContactsModel
 import com.BFCAI.encryptionapp.Presentation.SendScreen.SendScreenEvent
 import com.BFCAI.encryptionapp.Presentation.SendScreen.SendScreenState
-import com.BFCAI.encryptionapp.Presentation.SharedFilesScreen.SharedFilesEvent
-import com.BFCAI.encryptionapp.android.Presentation.Navigation.MyFileScreen.Component.IconItem
+import com.BFCAI.encryptionapp.android.Presentation.Navigation.Screens
 import com.BFCAI.encryptionapp.android.R
 @Composable
 fun ContactsComponent(
     item: ContactsItemModel,
     state: SendScreenState,
-    event: (SendScreenEvent) -> Unit
+    event: (SendScreenEvent) -> Unit,
+    navController: NavController
 ) {
     Row(
         modifier = Modifier
@@ -36,7 +36,7 @@ fun ContactsComponent(
             )
             .clickable(
                 onClick = {
-
+                    navController.navigate(Screens.ShareFileScreen.rout+"/"+item.contact2.objectId)
                 }
             ),
         verticalAlignment = Alignment.CenterVertically,

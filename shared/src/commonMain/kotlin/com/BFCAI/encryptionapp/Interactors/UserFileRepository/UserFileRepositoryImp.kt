@@ -96,4 +96,39 @@ class UserFileRepositoryImp constructor(
             )
         }
     }
+
+    override suspend fun shareFile(
+        fileId: String,
+        senderId: String,
+        reciverid: String,
+        token: String
+    ): Flow<DataState<String>> = flow{
+        emit(DataState.loading())
+        try {
+            val result = uploadInterface.shareFile(fileId,senderId,reciverid,token)
+            if (result.equals("sucsess")){
+                emit(DataState.data(data = result , message = null))
+            }else{
+                emit(
+                    DataState.error(
+                        message = GenericMessageInfo.Builder()
+                            .id("deleteFile.ERROR")
+                            .title("Error")
+                            .description("Cant Delete File")
+                            .uiComponentType(UIComponentType.SnackBar)
+                            .onDismiss { }
+                    )
+                )
+            }
+        }catch (e:Exception){
+            emit(DataState.error(
+                message = GenericMessageInfo.Builder()
+                    .id("shareFile.ERROR")
+                    .title("Error")
+                    .description(e.message ?: "UnKnownErroe")
+                    .uiComponentType(UIComponentType.SnackBar)
+                    .onDismiss { }
+            ))
+        }
+    }
 }

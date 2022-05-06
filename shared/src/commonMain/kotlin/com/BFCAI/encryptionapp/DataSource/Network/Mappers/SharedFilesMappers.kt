@@ -3,9 +3,11 @@ package com.BFCAI.encryptionapp.DataSource.Network.Mappers
 import com.BFCAI.encryptionapp.DataSource.Network.EntityDto.SenderOrReciverDto
 import com.BFCAI.encryptionapp.DataSource.Network.EntityDto.SharedFilesDto
 import com.BFCAI.encryptionapp.DataSource.Network.EntityDto.SharedFilesItemDto
+import com.BFCAI.encryptionapp.DataSource.Network.EntityDto.SharedfileDto
 import com.BFCAI.encryptionapp.Domain.Model.SenderOrReciverModel
 import com.BFCAI.encryptionapp.Domain.Model.SharedFilesItemModel
 import com.BFCAI.encryptionapp.Domain.Model.SharedFilesModel
+import com.BFCAI.encryptionapp.Domain.Model.SharedfileModel
 
 fun SharedFilesDto.toSharedFilesModel():SharedFilesModel{
     return SharedFilesModel(
@@ -18,18 +20,24 @@ fun List<SharedFilesItemDto>.toSharedFilesItemModelList():List<SharedFilesItemMo
 fun SharedFilesItemDto.toShareFilesItemModel():SharedFilesItemModel{
     return SharedFilesItemModel(
         objectId = objectId,
-        encryption_tool_id = encryption_tool_id,
-        file_type = file_type,
-        file = file,
+        fileDto = fileDto.toFileModel(),
         sender = sender.toSenderOrREciverModel(),
         reciver = reciver.toSenderOrREciverModel(),
-        password = password
     )
 }
 fun SenderOrReciverDto.toSenderOrREciverModel():SenderOrReciverModel{
     return SenderOrReciverModel(
         objectId = objectId,
         username = username,
-        emailVerified = emailVerified
+        email = email
+    )
+}
+fun SharedfileDto.toFileModel(): SharedfileModel {
+    return SharedfileModel(
+        objectId = objectId,
+        file_type = file_type,
+        encryption_tool_id = encryption_tool_id,
+        user_id = user_id,
+        file = file
     )
 }

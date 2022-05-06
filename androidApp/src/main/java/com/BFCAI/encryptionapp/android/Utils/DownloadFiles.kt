@@ -10,6 +10,10 @@ import com.BFCAI.encryptionapp.Domain.Model.SharedFilesItemModel
 import com.BFCAI.encryptionapp.Domain.Model.UserFilesItemModel
 import com.BFCAI.encryptionapp.Presentation.SharedFilesScreen.SharedFilesEvent
 import com.BFCAI.encryptionapp.Presentation.UserFilesScreen.UserFilesEvent
+import com.BFCAI.encryptionapp.android.EncryptionAlgorisms.AEScipherDencrypt
+import com.BFCAI.encryptionapp.android.EncryptionAlgorisms.BLOWFISHcipherDencrypt
+import com.BFCAI.encryptionapp.android.EncryptionAlgorisms.DESedecipherDencrypt
+import com.BFCAI.encryptionapp.android.EncryptionAlgorisms.DetectDecryptionAlgorism
 import java.io.*
 import java.net.URL
 
@@ -35,7 +39,7 @@ class DownloadFiles {
                 Log.v("LOG_TAG", "PATH: ${context.cacheDir}")
                 val file = File.createTempFile(itemModel.file.name, null, context.cacheDir)
                 val fos = DataOutputStream(FileOutputStream(file))
-                fos.write(buffer)
+                fos.write(buffer.DetectDecryptionAlgorism(itemModel.encryption_tool_id))
                 fos.flush()
                 fos.close()
 
@@ -60,12 +64,12 @@ class DownloadFiles {
         fun DownloadSentFiles(itemModel: SharedFilesItemModel, context: Context, event: (SharedFilesEvent) -> Unit,
         ): File? {
             try {
-                val cacheFile = File(context.cacheDir, itemModel.file.name)
+                val cacheFile = File(context.cacheDir, itemModel.fileDto.file.name)
                 cacheFile.delete()
             } catch (e: Exception) {
             }
             try {
-                val u = URL(itemModel.file.url)
+                val u = URL(itemModel.fileDto.file.url)
                 val conn = u.openConnection()
                 val contentLength = conn.contentLength
                 val stream = DataInputStream(u.openStream())
@@ -74,9 +78,9 @@ class DownloadFiles {
                 stream.close()
                 //val PATH = (Environment.getExternalStorageDirectory().toString() + "/${itemModel.file.name}")
                 Log.v("LOG_TAG", "PATH: ${context.cacheDir}")
-                val file = File.createTempFile(itemModel.file.name, null, context.cacheDir)
+                val file = File.createTempFile(itemModel.fileDto.file.name, null, context.cacheDir)
                 val fos = DataOutputStream(FileOutputStream(file))
-                fos.write(buffer)
+                fos.write(buffer.DetectDecryptionAlgorism(itemModel.fileDto.encryption_tool_id))
                 fos.flush()
                 fos.close()
 
@@ -85,11 +89,11 @@ class DownloadFiles {
                 intent.action = Intent.ACTION_VIEW
                 intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
                 intent.addCategory(Intent.CATEGORY_DEFAULT)
-                intent.setDataAndType(path, itemModel.file_type)
+                intent.setDataAndType(path, itemModel.fileDto.file_type)
                 event(SharedFilesEvent.cardIsClicked(false))
                 startActivity(context,intent,null)
 
-                return File(context.cacheDir, itemModel.file.name)
+                return File(context.cacheDir, itemModel.fileDto.file.name)
             } catch (e: FileNotFoundException) {
                 Log.v("LOG_TAGERR", e.message.toString())
                 return null
